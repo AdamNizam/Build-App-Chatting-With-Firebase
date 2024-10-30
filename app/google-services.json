@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "198936555086",
+    "project_id": "latihandasarfirebase",
+    "storage_bucket": "latihandasarfirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198936555086:android:d52364c18f19bd90475d1f",
+        "android_client_info": {
+          "package_name": "com.dicoding.myfirebasechat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm8FJITjSUoOnFHtChmB4m59D4OLpj_18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
