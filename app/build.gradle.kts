@@ -21,6 +21,7 @@ android {
     buildTypes {
         named("release") {
             isMinifyEnabled = false
+            buildConfigField("String","WEB_CLIENT_ID", "\"198936555086-91322nl5v5l15ipa0jk3jfq40ep1gh89.apps.googleusercontent.com\"")
             setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"))
         }
     }
@@ -50,4 +51,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.play.services.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 }
