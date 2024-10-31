@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.myfirebasechat.databinding.ActivityMainBinding
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -22,11 +24,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseDatabase
 
-    companion object {
-        const val MESSAGES_CHILD = "messages"
-    }
+    private lateinit var db: FirebaseDatabase
+    private lateinit var adapter: FirebaseMessageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         val firebaseUser = auth.currentUser
+
         if (firebaseUser == null) {
             // Not signed in, launch the Login activity
             startActivity(Intent(this, LoginActivity::class.java))
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         db = Firebase.database
+
         val messagesRef = db.reference.child(MESSAGES_CHILD)
 
         binding.sendButton.setOnClickListener {
@@ -61,6 +63,26 @@ class MainActivity : AppCompatActivity() {
             }
             binding.messageEditText.setText("")
         }
+
+        val manager = LinearLayoutManager(this)
+        manager.stackFromEnd = true
+        binding.messageRecyclerView.layoutManager = manager
+
+        val options = FirebaseRecyclerOptions.Builder<Message>()
+            .setQuery(messagesRef, Message::class.java)
+            .build()
+        adapter = FirebaseMessageAdapter(options, firebaseUser.displayName)
+        binding.messageRecyclerView.adapter = adapter
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        adapter.startListening()
+    }
+
+    public override fun onPause() {
+        adapter.stopListening()
+        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -82,11 +104,15 @@ class MainActivity : AppCompatActivity() {
     private fun signOut() {
         lifecycleScope.launch {
             val credentialManager = CredentialManager.create(this@MainActivity)
+
             auth.signOut()
             credentialManager.clearCredentialState(ClearCredentialStateRequest())
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             finish()
         }
+    }
 
+    companion object {
+        const val MESSAGES_CHILD = "messages"
     }
 }
