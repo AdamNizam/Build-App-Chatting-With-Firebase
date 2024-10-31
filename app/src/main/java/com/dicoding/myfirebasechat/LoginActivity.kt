@@ -55,18 +55,18 @@ class LoginActivity : AppCompatActivity() {
             .setServerClientId(getString(R.string.your_web_client_id))
             .build()
 
-        val request = GetCredentialRequest.Builder() //import from androidx.CredentialManager
+        val request = GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
 
         lifecycleScope.launch {
             try {
-                val result: GetCredentialResponse = credentialManager.getCredential( //import from androidx.CredentialManager
+                val result: GetCredentialResponse = credentialManager.getCredential(
                     request = request,
                     context = this@LoginActivity,
                 )
                 handleSignIn(result)
-            } catch (e: GetCredentialException) { //import from androidx.CredentialManager
+            } catch (e: GetCredentialException) {
                 Log.d("Error", e.message.toString())
             }
         }
@@ -80,7 +80,9 @@ class LoginActivity : AppCompatActivity() {
                 if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                     try {
                         val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+
                         firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
+
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e(TAG, "Received an invalid google id token response", e)
                     }
