@@ -44,6 +44,7 @@ class FirebaseMessageAdapter(
                 binding.tvTimestamp.text = DateUtils.getRelativeTimeSpanString(item.timestamp)
             }
         }
+
         private fun setTextColor(userName: String?, textView: TextView) {
             if (currentUserName == userName && userName != null) {
                 textView.setBackgroundResource(R.drawable.rounded_message_blue)
