@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import androidx.media.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -20,13 +20,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage.from}")
         Log.d(TAG, "Message data payload: " + remoteMessage.data)
         Log.d(TAG, "Message Notification Body: ${remoteMessage.notification?.body}")
         sendNotification(remoteMessage.notification?.title, remoteMessage.notification?.body)
     }
+
     private fun sendNotification(title: String?, messageBody: String?) {
         val contentIntent = Intent(applicationContext, MainActivity::class.java)
         val contentPendingIntent = PendingIntent.getActivity(
